@@ -5,23 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Welcome to posty</title>
-    @vite( 'resources/css/app.css','resources/js/app.js',)
+    @vite('resources/css/app.css')
 </head>
 <body class="bg-gray-200">
-    <nav class="p-6 bg-white flex justify-between">
+    @if(@session()->has('message'))
+    <div
+    class="fixed max-sm:w-[90%] top-[5px] left-1/2 -translate-x-1/2 bg-white text-slate-700 px-2 max-sm:px-1 py-3 border border-sky-500"
+    id="message"
+    >
+        <p>
+            {{session('message')}}
+        </p>
+    </div>
+    @endif
+    <nav class="p-6 max-sm:p-3 bg-white flex justify-between">
         <ul class="flex items-center justify-center">
-            <li><a href="" class="p-3">Home</a></li>
-            <li><a href="" class="p-3">Dashboard</a></li>
-            <li><a href="" class="p-3">Post</a></li>
+            <li><a href="" class="p-3 max-sm:p-2 hover:underline">Home</a></li>
+            <li><a href="" class="p-3 max-sm:p-2 hover:underline">Dashboard</a></li>
+            <li><a href="{{ route('posts') }}" class="p-3 max-sm:p-2 hover:underline">Post</a></li>
         </ul>
 
         <ul class="flex items-center justify-center">
-            <li><a href="" class="p-3">Piyal Hossein</a></li>
-            <li><a href="" class="p-3">Log out</a></li>
-            <li><a href="" class="p-3">Log in</a></li>
-            <li><a href="" class="p-3">Register</a></li>
+            @auth
+            <li><a href="" class="p-3 max-sm:p-2">{{'@'}}{{auth()->user()->username}}</a></li>
+            <li><form action="{{ route('logout') }}" method="POST">@csrf <button type="submit" class="hover:underline">Log out</button></form></li>
+            @else
+            <li><a href="{{ route('login') }}" class="p-3 max-sm:p-2 hover:underline">Log in</a></li>
+            <li><a href="{{ route('register') }}" class="p-3 max-sm:p-2 hover:underline">Register</a></li>
+            @endauth
         </ul>
     </nav>
+    
     {{ $slot }}
 </body>
+<script src="{{ @asset('js/main.js') }}"></script>
 </html>
