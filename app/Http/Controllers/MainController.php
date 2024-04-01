@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
     public function index(){
-        return view('index');
+        $posts = Post::latest()->paginate(10);
+        return view("index",[
+            "posts" => $posts,
+        ]);
     }
     public function dashboard(){
-        return view('dashboard');
+        $posts = auth()->user()->posts()->latest()->paginate(10);
+        return view("post/posts",[
+            "posts" => $posts,
+        ]);
     }
 }

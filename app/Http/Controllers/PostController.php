@@ -20,10 +20,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $posts = auth()->user()->posts()->latest()->get();
-        return view("post/posts",[
-            "posts" => $posts,
-        ]);
+        
     }
 
     /**
@@ -35,7 +32,7 @@ class PostController extends Controller
             "post" => "required",
         ]);
         auth()->user()->posts()->create($data);
-        return redirect()->route("posts")->with('message','Post Successfully added.');
+        return redirect()->route("dashboard")->with('message','Post Successfully added.');
     }
 
     /**
@@ -51,7 +48,11 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        if($post->user_id == auth()->id()){
+            $posts = auth()->user()->posts()->latest()->paginate(10);
+            return view('post.update', ['current_post'=> $post,'posts'=>$posts]);
+        }
+        return back()->with('message','You are not authorized to edit this post');
     }
 
     /**
@@ -59,7 +60,14 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        if($post->user_id != auth()->id()){
+            abort(403,'Unauthorized Access');
+        }
+        $data = $request->validate([
+            "post" => "required",
+        ]);
+        $post->update($data);
+        return redirect()->route("dashboard")->with("message","Post successfully Updated");
     }
 
     /**
@@ -71,7 +79,6 @@ class PostController extends Controller
             abort(403,'Unauthorized Access');
         }
         $post->delete();
-        $posts = auth()->user()->posts()->latest()->get();
-        return redirect()->route('posts',["posts" => $posts])->with('message','Post deleted successfully!');
+        return redirect()->route('dashboard')->with('message','Post deleted successfully!');
     }
 }

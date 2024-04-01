@@ -5,17 +5,6 @@
             <form class="w-[40%] max-md:w-[70%] max-sm:w-[100%]" action="{{ route('register') }}" method="POST">
                 @csrf
                 <div class="mb-4">
-                    <label for="name" class="inline-block mb-1">Name</label>
-                    <input type="text" name="name" id="name" placeholder="Your name"
-                        class="bg-gray-100 border-2 @error('name') border-red-500 @else border-gray-200 @enderror w-full p-2 rounded-lg"
-                        value="{{ old('name') }}">
-                    @error('name')
-                        <p class="text-red-500">
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
-                <div class="mb-4">
                     <label for="username" class="inline-block mb-1">Username</label>
                     <input type="text" name="username" id="username" placeholder="Your username"
                         class="bg-gray-100 border-2 @error('username') border-red-500 @else border-gray-200 @enderror w-full p-2 rounded-lg"

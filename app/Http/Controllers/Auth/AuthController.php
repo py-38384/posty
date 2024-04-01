@@ -15,8 +15,7 @@ class AuthController extends Controller
 
     public function store(Request $request){
         $data = $request->validate([
-            "name"=> "",
-            "username"=> ["required","max:12"],
+            "username"=> ["required","max:12",Rule::unique('users','username')],
             "email"=> ["required","email",Rule::unique('users','email')],
             "password"=> ["required","confirmed","min:6"],
         ]);
